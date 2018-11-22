@@ -3,6 +3,7 @@
 
 import os
 from conans import ConanFile, AutoToolsBuildEnvironment, tools
+from conans.errors import ConanInvalidConfiguration
 
 
 class ncursesConan(ConanFile):
@@ -27,6 +28,8 @@ class ncursesConan(ConanFile):
 
     def configure(self):
         del self.settings.compiler.libcxx
+        if self.settings.compiler == "Visual Studio":
+            raise ConanInvalidConfiguration("ncurse is not supported for Visual Studio")
 
     def source(self):
         folder_name = "ncurses-%s" % self.version
@@ -44,7 +47,7 @@ class ncursesConan(ConanFile):
                 '--without-debug'
                 '--with-%s' % ("shared" if self.options.shared else "normal")
                 ]
-            self._autotools = AutoToolsBuildEnvironment(self)
+            self._autotools = AutoToolsBuildEnvironment(self, win_bash=tools.os_info.is_windows)
             self._autotools.configure(args=args)
         return self._autotools
 
@@ -58,7 +61,6 @@ class ncursesConan(ConanFile):
         with tools.chdir(self._source_subfolder):
             autotools = self._configure_autotools()
             autotools.install()
-
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
