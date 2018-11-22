@@ -2,13 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import os
-import shutil
 from conans import ConanFile, AutoToolsBuildEnvironment, tools
 
 
 class ncursesConan(ConanFile):
     name = "ncurses"
-    version = "6.1"    
+    version = "6.1"
     url = "https://github.com/conan-community/conan-ncurses"
     homepage = "https://www.gnu.org/software/ncurses"
     author = "Conan Community"
@@ -21,7 +20,7 @@ class ncursesConan(ConanFile):
     exports = "LICENSE"
     _autotools = None
     _source_subfolder = "source_subfolder"
-    
+
     def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC

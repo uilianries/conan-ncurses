@@ -6,6 +6,8 @@ linux: &linux
    python: "3.7"
    services:
      - docker
+   env:
+     CONAN_DOCKER_32_IMAGES=1
 osx: &osx
    os: osx
    language: generic
