@@ -1,23 +1,31 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <ncurses.h>
 
 int main(int argc, char *argv[]) {
-    initscr();
-    start_color();
+    WINDOW* window = NULL;
 
-    init_pair(1, COLOR_BLACK, COLOR_CYAN);
-    init_pair(2, COLOR_BLACK, COLOR_GREEN);
+    printf("ncurses version: %s\n", curses_version());
 
-    attron(COLOR_PAIR(1));
-    printw("Conan, the C / C++ Package Manager for Developers\n");
+    window = initscr();
+    if (window != NULL) {
 
-    attron(COLOR_PAIR(2));
-    printw("This is the ncurses Conan package!\n");
-    refresh();
+        if (start_color() != ERR) {
+            init_pair(1, COLOR_BLACK, COLOR_CYAN);
+            init_pair(2, COLOR_BLACK, COLOR_GREEN);
 
-    sleep(1);
+            attron(COLOR_PAIR(1));
+            printw("Conan, the C / C++ Package Manager for Developers\n");
 
-    endwin();
+            attron(COLOR_PAIR(2));
+        }
+        printw("This is the ncurses Conan package!\n");
+        refresh();
+
+        sleep(1);
+
+        endwin();
+    }
 }
