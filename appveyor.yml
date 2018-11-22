@@ -2,10 +2,14 @@ build: false
 
 environment:
     PYTHON: "C:\\Python37"
+    CONAN_BUILD_REQUIRES: "msys2_installer/latest@bincrafters/stable"
 
     matrix:
 
-        - MINGW_CONFIGURATIONS: "7@x86_64@seh@posix, 6@x86_64@seh@posix, 5@x86_64@seh@posix, 4.9@x86_64@seh@posix"
+        - MINGW_CONFIGURATIONS: "4.9@x86_64@seh@posix"
+        - MINGW_CONFIGURATIONS: "5@x86_64@seh@posix"
+        - MINGW_CONFIGURATIONS: "6@x86_64@seh@posix"
+        - MINGW_CONFIGURATIONS: "7@x86_64@seh@posix"
 
 install:
   - set PATH=%PATH%;%PYTHON%/Scripts/
