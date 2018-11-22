@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from conans import ConanFile, CMake, tools
+from conans import ConanFile, CMake, tools, RunEnvironment
 
 
 class TestPackageConan(ConanFile):
@@ -13,12 +13,15 @@ class TestPackageConan(ConanFile):
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
-        
+
     def test(self):
         assert os.path.isfile(os.path.join(self.deps_cpp_info["ncurses"].rootpath, "licenses", "COPYING"))
         if tools.cross_building(self.settings):
             self.output.warn("Skipping run cross built package")
             return
 
-        bin_path = os.path.join("bin", "test_package")
-        self.run("%s" % bin_path, run_environment=True)
+        env = RunEnvironment(self)
+        env.vars["TERM"] = "xterm"
+        with tools.environment_append(env.vars):
+            bin_path = os.path.join("bin", "test_package")
+            self.run("%s" % bin_path, run_environment=True)
