@@ -2,7 +2,6 @@ build: false
 
 environment:
     PYTHON: "C:\\Python37"
-    CONAN_BUILD_REQUIRES: "msys2_installer/latest@bincrafters/stable"
 
     matrix:
 
