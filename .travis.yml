@@ -8,6 +8,7 @@ linux: &linux
      - docker
    env:
      CONAN_DOCKER_32_IMAGES=1
+     TERM=xterm
 osx: &osx
    os: osx
    language: generic
