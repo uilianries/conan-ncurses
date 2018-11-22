@@ -1,0 +1,119 @@
+diff --git a/configure b/configure
+index adead92..bd51eb0 100755
+--- a/configure
++++ b/configure
+@@ -1917,9 +1917,9 @@ echo "${ECHO_T}$ac_cv_c_compiler_gnu" >&6
+ GCC=`test $ac_compiler_gnu = yes && echo yes`
+ ac_test_CFLAGS=${CFLAGS+set}
+ ac_save_CFLAGS=$CFLAGS
+-CFLAGS="-g"
+-echo "$as_me:1921: checking whether $CC accepts -g" >&5
+-echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
++CFLAGS=""
++echo "$as_me:1921: checking whether $CC accepts" >&5
++echo $ECHO_N "checking whether $CC accepts... $ECHO_C" >&6
+ if test "${ac_cv_prog_cc_g+set}" = set; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+@@ -1961,13 +1961,13 @@ if test "$ac_test_CFLAGS" = set; then
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS=
+   else
+-    CFLAGS="-g"
++    CFLAGS=
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS=
+   else
+     CFLAGS=
+   fi
+@@ -2834,9 +2834,9 @@ echo "${ECHO_T}$ac_cv_cxx_compiler_gnu" >&6
+ GXX=`test $ac_compiler_gnu = yes && echo yes`
+ ac_test_CXXFLAGS=${CXXFLAGS+set}
+ ac_save_CXXFLAGS=$CXXFLAGS
+-CXXFLAGS="-g"
+-echo "$as_me:2838: checking whether $CXX accepts -g" >&5
+-echo $ECHO_N "checking whether $CXX accepts -g... $ECHO_C" >&6
++CXXFLAGS=""
++echo "$as_me:2838: checking whether $CXX accepts" >&5
++echo $ECHO_N "checking whether $CXX accepts... $ECHO_C" >&6
+ if test "${ac_cv_prog_cxx_g+set}" = set; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+@@ -2878,13 +2878,13 @@ if test "$ac_test_CXXFLAGS" = set; then
+   CXXFLAGS=$ac_save_CXXFLAGS
+ elif test $ac_cv_prog_cxx_g = yes; then
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-g -O2"
++    CXXFLAGS=""
+   else
+-    CXXFLAGS="-g"
++    CXXFLAGS=""
+   fi
+ else
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-O2"
++    CXXFLAGS=""
+   else
+     CXXFLAGS=
+   fi
+@@ -5904,12 +5904,12 @@ EOF
+ fi
+ 
+ if test X"$CC_G_OPT" = X"" ; then
+-	CC_G_OPT='-g'
++	CC_G_OPT=''
+ 	test -n "$GCC" && test "x${ac_cv_prog_cc_g}" != xyes && CC_G_OPT=''
+ fi
+ 
+ if test X"$CXX_G_OPT" = X"" ; then
+-	CXX_G_OPT='-g'
++	CXX_G_OPT=''
+ 	test -n "$GXX" && test "x${ac_cv_prog_cxx_g}" != xyes && CXX_G_OPT=''
+ fi
+ 
+@@ -13736,7 +13736,7 @@ echo "$as_me:13735: result: $with_install_o" >&5
+ echo "${ECHO_T}$with_install_o" >&6
+ if test "x$with_install_o" = xyes
+ then
+-	INSTALL_OPT_O=`id root|sed -e 's/uid=[0-9]*(/ -o /' -e 's/gid=[0-9]*(/ -g /' -e 's/ [^=[:space:]][^=[:space:]]*=.*/ /' -e 's/)//g'`
++	INSTALL_OPT_O=`id root|sed -e 's/uid=[0-9]*(/ -o /' -e 's/gid=[0-9]*(/ /' -e 's/ [^=[:space:]][^=[:space:]]*=.*/ /' -e 's/)//g'`
+ else
+ 	INSTALL_OPT_O=
+ fi
+@@ -14620,7 +14620,7 @@ if test -n "$GCC"
+ then
+ 	if test "$with_assertions" = no
+ 	then
+-		CPPFLAGS="$CPPFLAGS -DNDEBUG"
++		CPPFLAGS="$CPPFLAGS"
+ 	else
+ 
+  	ADAFLAGS="$ADAFLAGS -gnata"
+@@ -14641,7 +14641,7 @@ cat >>confdefs.h <<EOF
+ #define USE_DMALLOC 1
+ EOF
+ 
+-	: ${with_cflags:=-g}
++	: ${with_cflags:=}
+ 	: ${with_no_leaks:=yes}
+ 	 with_dmalloc=yes
+ else
+diff --git a/configure.in b/configure.in
+index 7dbf48f..55b0fdc 100644
+--- a/configure.in
++++ b/configure.in
+@@ -1504,7 +1504,7 @@ if test -n "$GCC"
+ then
+ 	if test "$with_assertions" = no
+ 	then
+-		CPPFLAGS="$CPPFLAGS -DNDEBUG"
++		CPPFLAGS="$CPPFLAGS"
+ 	else
+ 		CF_ADD_ADAFLAGS(-gnata)
+ 	fi

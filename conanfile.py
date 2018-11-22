@@ -19,6 +19,7 @@ class ncursesConan(ConanFile):
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = {"shared": False, "fPIC": True}
     exports = "LICENSE"
+    exports_sources = "ncurses.patch"
     _autotools = None
     _source_subfolder = "source_subfolder"
 
@@ -52,6 +53,7 @@ class ncursesConan(ConanFile):
         return self._autotools
 
     def build(self):
+        tools.patch(patch_file="ncurses.patch", base_path=self._source_subfolder)
         with tools.chdir(self._source_subfolder):
             autotools = self._configure_autotools()
             autotools.make()
