@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from conans import ConanFile, CMake, tools, RunEnvironment
+from conans import ConanFile, CMake, tools
 
 
 class TestPackageConan(ConanFile):
@@ -20,8 +20,5 @@ class TestPackageConan(ConanFile):
             self.output.warn("Skipping run cross built package")
             return
 
-        env = RunEnvironment(self)
-        env.vars["TERM"] = "xterm"
-        with tools.environment_append(env.vars):
-            bin_path = os.path.join("bin", "test_package")
-            self.run("%s" % bin_path, run_environment=True)
+        bin_path = os.path.join("bin", "test_package")
+        self.run("%s" % bin_path, run_environment=True)
