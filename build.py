@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     docker_entry_script = None
     if tools.os_info.is_linux:
-        docker_entry_script = "sudo apt-get -qq update && sudo apt-get -qq install -y --no-install-recommends xterm && export TERM=xterm"
+        docker_entry_script = "sudo apt-get -qq update && sudo apt-get install -y --no-install-recommends xterm > /dev/null && export TERM=xterm"
 
     builder = ConanMultiPackager(docker_entry_script=docker_entry_script)
     builder.add_common_builds(pure_c=True)
