@@ -1,5 +1,5 @@
 diff --git a/configure b/configure
-index adead92..bd51eb0 100755
+index adead92..56aa4e2 100755
 --- a/configure
 +++ b/configure
 @@ -1917,9 +1917,9 @@ echo "${ECHO_T}$ac_cv_c_compiler_gnu" >&6
@@ -77,7 +77,148 @@ index adead92..bd51eb0 100755
  	test -n "$GXX" && test "x${ac_cv_prog_cxx_g}" != xyes && CXX_G_OPT=''
  fi
  
-@@ -13736,7 +13736,7 @@ echo "$as_me:13735: result: $with_install_o" >&5
+@@ -6104,62 +6104,6 @@ echo "${ECHO_T}$cf_cv_shlib_version" >&6
+ 	# Some less-capable ports of gcc support only -fpic
+ 	CC_SHARED_OPTS=
+ 
+-	cf_try_fPIC=no
+-	if test "$GCC" = yes
+-	then
+-		cf_try_fPIC=yes
+-	else
+-		case $cf_cv_system_name in
+-		(*linux*)	# e.g., PGI compiler
+-			cf_try_fPIC=yes
+-			;;
+-		esac
+-	fi
+-
+-	if test "$cf_try_fPIC" = yes
+-	then
+-		echo "$as_me:6121: checking which $CC option to use" >&5
+-echo $ECHO_N "checking which $CC option to use... $ECHO_C" >&6
+-		cf_save_CFLAGS="$CFLAGS"
+-		for CC_SHARED_OPTS in -fPIC -fpic ''
+-		do
+-			CFLAGS="$cf_save_CFLAGS $CC_SHARED_OPTS"
+-			cat >conftest.$ac_ext <<_ACEOF
+-#line 6128 "configure"
+-#include "confdefs.h"
+-#include <stdio.h>
+-int
+-main (void)
+-{
+-int x = 1
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-rm -f conftest.$ac_objext
+-if { (eval echo "$as_me:6140: \"$ac_compile\"") >&5
+-  (eval $ac_compile) 2>&5
+-  ac_status=$?
+-  echo "$as_me:6143: \$? = $ac_status" >&5
+-  (exit $ac_status); } &&
+-         { ac_try='test -s conftest.$ac_objext'
+-  { (eval echo "$as_me:6146: \"$ac_try\"") >&5
+-  (eval $ac_try) 2>&5
+-  ac_status=$?
+-  echo "$as_me:6149: \$? = $ac_status" >&5
+-  (exit $ac_status); }; }; then
+-  break
+-else
+-  echo "$as_me: failed program was:" >&5
+-cat conftest.$ac_ext >&5
+-fi
+-rm -f conftest.$ac_objext conftest.$ac_ext
+-		done
+-		echo "$as_me:6158: result: $CC_SHARED_OPTS" >&5
+-echo "${ECHO_T}$CC_SHARED_OPTS" >&6
+-		CFLAGS="$cf_save_CFLAGS"
+-	fi
+-
+ 	cf_cv_shlib_version_infix=no
+ 
+ 	case $cf_cv_system_name in
+@@ -6310,7 +6254,7 @@ echo "${ECHO_T}$cf_cv_ldflags_search_paths_first" >&6
+ 		fi
+ 		# tested with IRIX 5.2 and 'cc'.
+ 		if test "$GCC" != yes; then
+-			CC_SHARED_OPTS='-KPIC'
++			CC_SHARED_OPTS=''
+ 			MK_SHARED_LIB='${CC} ${LDFLAGS} ${CFLAGS} -shared -rdata_shared -soname `basename $@` -o $@'
+ 		else
+ 			MK_SHARED_LIB='${CC} ${LDFLAGS} ${CFLAGS} -shared -Wl,-soname,`basename $@` -o $@'
+@@ -6370,7 +6314,7 @@ CF_EOF
+ 		if test "$cf_cv_enable_rpath" = yes ; then
+ 			EXTRA_LDFLAGS="${cf_ld_rpath_opt}\${RPATH_LIST} $EXTRA_LDFLAGS"
+ 		fi
+-		CC_SHARED_OPTS="$CC_SHARED_OPTS -DPIC"
++		CC_SHARED_OPTS="$CC_SHARED_OPTS"
+ 
+ 	test "$cf_cv_shlib_version" = auto && cf_cv_shlib_version=rel
+ 	if test "$cf_cv_shlib_version" = rel; then
+@@ -6382,12 +6326,12 @@ CF_EOF
+ 		MK_SHARED_LIB='${CC} ${LDFLAGS} ${CFLAGS} -shared -Wl,-Bshareable,-soname,'$cf_cv_shared_soname',-stats,-lc -o $@'
+ 		;;
+ 	(nto-qnx*|openbsd*|freebsd[12].*)
+-		CC_SHARED_OPTS="$CC_SHARED_OPTS -DPIC"
++		CC_SHARED_OPTS="$CC_SHARED_OPTS"
+ 		MK_SHARED_LIB='${LD} ${LDFLAGS} -Bshareable -o $@'
+ 		test "$cf_cv_shlib_version" = auto && cf_cv_shlib_version=rel
+ 		;;
+ 	(dragonfly*|freebsd*)
+-		CC_SHARED_OPTS="$CC_SHARED_OPTS -DPIC"
++		CC_SHARED_OPTS="$CC_SHARED_OPTS"
+ 		if test "$DFT_LWR_MODEL" = "shared" && test "$cf_cv_enable_rpath" = yes ; then
+ 			LOCAL_LDFLAGS="${cf_ld_rpath_opt}\$(LOCAL_LIBDIR)"
+ 			LOCAL_LDFLAGS2="${cf_ld_rpath_opt}\${RPATH_LIST} $LOCAL_LDFLAGS"
+@@ -6404,7 +6348,7 @@ CF_EOF
+ 		MK_SHARED_LIB='${CC} ${LDFLAGS} ${CFLAGS} -shared -Wl,-soname,'$cf_cv_shared_soname',-stats,-lc -o $@'
+ 		;;
+ 	(netbsd*)
+-		CC_SHARED_OPTS="$CC_SHARED_OPTS -DPIC"
++		CC_SHARED_OPTS="$CC_SHARED_OPTS"
+ 		if test "$DFT_LWR_MODEL" = "shared" && test "$cf_cv_enable_rpath" = yes ; then
+ 			LOCAL_LDFLAGS="${cf_ld_rpath_opt}\$(LOCAL_LIBDIR)"
+ 			LOCAL_LDFLAGS2="$LOCAL_LDFLAGS"
+@@ -6449,7 +6393,7 @@ CF_EOF
+ 	(sco3.2v5*)  # also uw2* and UW7: hops 13-Apr-98
+ 		# tested with osr5.0.5
+ 		if test "$GCC" != yes; then
+-			CC_SHARED_OPTS='-belf -KPIC'
++			CC_SHARED_OPTS='-belf'
+ 		fi
+ 		MK_SHARED_LIB='${LD} ${LDFLAGS} -dy -G -h `basename $@ .${REL_VERSION}`.${ABI_VERSION} -o $@'
+ 		if test "$cf_cv_enable_rpath" = yes ; then
+@@ -6463,7 +6407,7 @@ CF_EOF
+ 	(sunos4*)
+ 		# tested with SunOS 4.1.1 and gcc 2.7.0
+ 		if test "$GCC" != yes; then
+-			CC_SHARED_OPTS='-KPIC'
++			CC_SHARED_OPTS=''
+ 		fi
+ 		MK_SHARED_LIB='${LD} ${LDFLAGS} -assert pure-text -o $@'
+ 		test "$cf_cv_shlib_version" = auto && cf_cv_shlib_version=rel
+@@ -6488,7 +6432,7 @@ CF_EOF
+ 
+ 		if test "$GCC" != yes; then
+ 			cf_save_CFLAGS="$CFLAGS"
+-			for cf_shared_opts in -xcode=pic32 -xcode=pic13 -KPIC -Kpic -O
++			for cf_shared_opts in -xcode=pic32 -xcode=pic13 -O
+ 			do
+ 				CFLAGS="$cf_shared_opts $cf_save_CFLAGS"
+ 				cat >conftest.$ac_ext <<_ACEOF
+@@ -6532,7 +6476,7 @@ rm -f conftest.$ac_objext conftest.$ac_ext
+ 	(sysv5uw7*|unix_sv*)
+ 		# tested with UnixWare 7.1.0 (gcc 2.95.2 and cc)
+ 		if test "$GCC" != yes; then
+-			CC_SHARED_OPTS='-KPIC'
++			CC_SHARED_OPTS=''
+ 		fi
+ 		MK_SHARED_LIB='${LD} ${LDFLAGS} -d y -G -o $@'
+ 		;;
+@@ -13736,7 +13680,7 @@ echo "$as_me:13735: result: $with_install_o" >&5
  echo "${ECHO_T}$with_install_o" >&6
  if test "x$with_install_o" = xyes
  then
@@ -86,7 +227,7 @@ index adead92..bd51eb0 100755
  else
  	INSTALL_OPT_O=
  fi
-@@ -14620,7 +14620,7 @@ if test -n "$GCC"
+@@ -14620,7 +14564,7 @@ if test -n "$GCC"
  then
  	if test "$with_assertions" = no
  	then
@@ -95,7 +236,7 @@ index adead92..bd51eb0 100755
  	else
  
   	ADAFLAGS="$ADAFLAGS -gnata"
-@@ -14641,7 +14641,7 @@ cat >>confdefs.h <<EOF
+@@ -14641,7 +14585,7 @@ cat >>confdefs.h <<EOF
  #define USE_DMALLOC 1
  EOF
  

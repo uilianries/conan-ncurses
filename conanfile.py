@@ -16,8 +16,8 @@ class ncursesConan(ConanFile):
     description = "An API, allowing the programmer to write text-based user interfaces, TUIs, in a terminal-independent manner"
     topics = ("conan", "ncurses", "terminal", "screen", "tui")
     settings = "os", "compiler", "arch", "build_type"
-    options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {"shared": False, "fPIC": True}
+    options = {"shared": [True, False], "fPIC": [True, False], "with_cpp": [True, False]}
+    default_options = {"shared": False, "fPIC": True, "with_cpp": True}
     exports = "LICENSE"
     exports_sources = "ncurses.patch"
     _autotools = None
@@ -28,9 +28,10 @@ class ncursesConan(ConanFile):
             del self.options.fPIC
 
     def configure(self):
-        del self.settings.compiler.libcxx
         if self.settings.compiler == "Visual Studio":
             raise ConanInvalidConfiguration("ncurse is not supported for Visual Studio")
+        if not self.options.with_cpp:
+            del self.settings.compiler.libcxx
 
     def source(self):
         folder_name = "ncurses-%s" % self.version
@@ -45,9 +46,13 @@ class ncursesConan(ConanFile):
                 '--enable-overwrite',
                 '--without-manpages',
                 '--without-tests',
-                '--without-debug'
-                '--with-%s' % ("shared" if self.options.shared else "normal")
+                '--with-{}'.format("shared" if self.options.shared else "normal"),
+                '--without-{}'.format("normal" if self.options.shared else "shared")
                 ]
+            if self.options.with_cpp:
+                args.append('--with-{}'.format("cxx-shared" if self.options.shared else "cxx"))
+            else:
+                args.extend(['--without-cxx-shared', "--without-cxx"])
             self._autotools = AutoToolsBuildEnvironment(self, win_bash=tools.os_info.is_windows)
             self._autotools.configure(args=args)
         return self._autotools
