@@ -7,8 +7,7 @@ linux: &linux
    services:
      - docker
    env:
-     CONAN_DOCKER_32_IMAGES=1
-     TERM=xterm
+     - CONAN_DOCKER_32_IMAGES=1
 osx: &osx
    os: osx
    language: generic
