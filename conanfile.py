@@ -46,6 +46,7 @@ class ncursesConan(ConanFile):
                 '--enable-overwrite',
                 '--without-manpages',
                 '--without-tests',
+                '--disable-echo',
                 '--with-{}'.format("shared" if self.options.shared else "normal"),
                 '--without-{}'.format("normal" if self.options.shared else "shared")
                 ]
