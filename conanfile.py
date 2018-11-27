@@ -28,7 +28,10 @@ class ncursesConan(ConanFile):
             del self.options.fPIC
 
     def configure(self):
-        if self.settings.compiler == "Visual Studio":
+        # FIXME (uilian): Fix Windows support
+        if self.settings.os == "Windows":
+            raise ConanInvalidConfiguration("Ops! ncurses is not supported on Windows yet")
+        if self.settings.os == "Windows" and self.settings.compiler == "Visual Studio":
             raise ConanInvalidConfiguration("ncurse is not supported for Visual Studio")
         if not self.options.with_cpp:
             del self.settings.compiler.libcxx
