@@ -12,10 +12,6 @@ if __name__ == "__main__":
     if tools.os_info.is_linux:
         docker_entry_script = "sudo apt-get -qq update && sudo apt-get install -y --no-install-recommends xterm > /dev/null && export TERM=xterm"
 
-    # FIXME (uilian): Not working on Windows
-    if tools.os_info.is_windows:
-        sys.exit(0)
-
     builder = ConanMultiPackager(docker_entry_script=docker_entry_script)
     builder.add_common_builds(pure_c=True)
     builder.update_build_if(lambda bool: True, new_options={"ncurses:with_cpp": False})
