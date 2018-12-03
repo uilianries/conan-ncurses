@@ -33,6 +33,10 @@ class ncursesConan(ConanFile):
     def _is_msvc(self):
         return self.settings.compiler == "Visual Studio"
 
+    @property
+    def _is_mingw_windows(self):
+        return self.settings.os == "Windows" and self.settings.compiler == "gcc" and os.name == "nt"
+
     def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC
@@ -63,7 +67,7 @@ class ncursesConan(ConanFile):
         shutil.move('ar-lib', os.path.join(self._source_subfolder, 'build-aux', 'ar-lib'))
 
     def build_requirements(self):
-        if self._is_msvc:
+        if self._is_msvc or self._is_mingw_windows:
             self.build_requires("msys2_installer/latest@bincrafters/stable")
 
     def _patch_msvc_sources(self):
