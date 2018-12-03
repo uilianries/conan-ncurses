@@ -1,13 +1,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#ifdef _MSC_VER
+#include <windows.h>
+#else
 #include <unistd.h>
+#endif
+
 #include <ncurses.h>
+
+#define refresh() wrefresh(stdscr)
 
 int main(int argc, char *argv[]) {
     WINDOW* window = NULL;
 
     printf("ncurses version: %s\n", curses_version());
+
+    //_putenv("TERM=tinfo");
+
     window = initscr();
 
     if (window != NULL) {
@@ -22,7 +33,11 @@ int main(int argc, char *argv[]) {
         printw("This is the ncurses Conan package!\n");
 
         refresh();
+#ifdef _MSC_VER
+        Sleep(1000);
+#else
         sleep(1);
+#endif
         endwin();
     }
     return EXIT_SUCCESS;
