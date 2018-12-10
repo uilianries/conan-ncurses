@@ -70,54 +70,6 @@ class ncursesConan(ConanFile):
         if self._is_msvc or self._is_mingw_windows:
             self.build_requires("msys2_installer/latest@bincrafters/stable")
 
-    def _patch_msvc_sources(self):
-        if self._is_msvc:
-            # TODO: this is a mess! please create patch file from this!
-            tools.replace_in_file(os.path.join("include", "MKterm.h.awk.in"),
-                                  "#if __MINGW32__",
-                                  "#if defined(__MINGW32__) || defined(_MSC_VER)")
-            tools.replace_in_file(os.path.join("include", "ncurses_mingw.h"),
-                                  "#ifdef __MINGW32__",
-                                  "#if defined(__MINGW32__) || defined(_MSC_VER)")
-            tools.replace_in_file(os.path.join("include", "nc_termios.h"),
-                                  "#if __MINGW32__",
-                                  "#if defined(__MINGW32__) || defined(_MSC_VER)")
-            tools.replace_in_file(os.path.join("include", "nc_mingw.h"),
-                                  "#ifdef __MINGW32__",
-                                  "#if defined(__MINGW32__) || defined(_MSC_VER)")
-            tools.replace_in_file(os.path.join("include", "nc_mingw.h"),
-                                  "#include <sys/time.h>",
-                                  "#if HAVE_SYS_TIME_H\n"
-                                  "#include <sys/time.h>\n"
-                                  "#endif")
-            win_driver = os.path.join("ncurses", "win32con", "win_driver.c")
-            tools.replace_in_file(win_driver,
-                                  "#ifndef __GNUC__",
-                                  "#if 0")
-            # TODO: below should have #ifdef _MSC_VER for compatibily...
-            tools.replace_in_file(win_driver,
-                                  "CHAR_INFO ci[n];",
-                                  "CHAR_INFO * ci = (CHAR_INFO*) _alloca(sizeof(CHAR_INFO) * n);")
-            tools.replace_in_file(win_driver,
-                                  "CHAR_INFO ci[limit];",
-                                  "CHAR_INFO * ci = (CHAR_INFO*) _alloca(sizeof(CHAR_INFO) * limit);")
-            tools.replace_in_file(win_driver,
-                                  "CHAR_INFO this_screen[max_cells];",
-                                  "CHAR_INFO * this_screen = (CHAR_INFO*) _alloca(sizeof(CHAR_INFO) * max_cells);")
-            tools.replace_in_file(win_driver,
-                                  "CHAR_INFO that_screen[max_cells];",
-                                  "CHAR_INFO * that_screen = (CHAR_INFO*) _alloca(sizeof(CHAR_INFO) * max_cells);")
-            tools.replace_in_file(win_driver,
-                                  "cchar_t empty[Width];",
-                                  "cchar_t * empty = (cchar_t*) _alloca(sizeof(cchar_t) * Width);")
-            tools.replace_in_file(win_driver,
-                                  "chtype empty[Width];",
-                                  "chtype * empty = (chtype*) _alloca(sizeof(chtype) * Width);")
-            tools.replace_in_file(os.path.join("ncurses", "win32con", "gettimeofday.c"),
-                                  "#include <windows.h>",
-                                  "#include <windows.h>\n"
-                                  "#include <winsock2.h>")
-
     def _configure_autotools(self):
         if not self._autotools:
             args = [
@@ -165,8 +117,6 @@ class ncursesConan(ConanFile):
 
         with tools.chdir(self._source_subfolder):
             if self._is_msvc:
-                self._patch_msvc_sources()
-
                 with tools.vcvars(self.settings):
                     env_build = VisualStudioBuildEnvironment(self)
                     with tools.environment_append(env_build.vars):
